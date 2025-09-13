@@ -11,11 +11,7 @@ import { redirect } from "next/navigation";
 export default function Chat(
     {chatid}:{chatid?:string}
 ){
-    const sessioncntxt = useContext(SessionContext)
-    if(!sessioncntxt)
-        throw new Error
-    if(sessioncntxt?.session?.user_type!=="user")  
-        redirect("/chat")
+ 
     const thcnxt = useContext(ThemeContext)
     if(!thcnxt)
         throw new Error("Theme context not defined")
