@@ -21,7 +21,7 @@ export default function SessionContextProvider(
     async function getSession() {
         // getSession from server 
         setSession({
-            user_type: "user"
+            user_type: "guest"
         })
         setLoading(false)
     }
