@@ -4,9 +4,15 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import type { FC, ReactNode, SVGProps } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card,CardHeader,CardTitle,CardFooter,CardContent } from '@/components/ui/card';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import ThemeContext from './_Contxets/ThemeProvider';
-import Image from 'next/image';
+
+import InputPromptArea from '@/components/Chat/InputPrompt/InputTextArea';
+
+import Aurora from '@/components/Aurora';
+import TextType from "@/components/TextType"
+import SmallChat from '@/components/SmallChat/smallchat';
+import GoogleTranslate from '@/components/GoogleTranslate/googletranslate'
 
 
 const IconWrapper: FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
@@ -110,7 +116,7 @@ const Header: FC<{ theme: string; toggleTheme: () => void; botpageclick:()=>void
                     <path d="M2 7L12 12L22 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M12 12V22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <span className="font-bold text-xl text-slate-900 dark:text-white">INGRES AI</span>
+                <span className="font-bold text-xl text-slate-900 dark:text-white">JalMitra</span>
             </a>
             <div className="flex items-center gap-4">
                  <nav className="hidden md:flex items-center space-x-6">
@@ -127,39 +133,71 @@ const Header: FC<{ theme: string; toggleTheme: () => void; botpageclick:()=>void
     </header>
 );
 
-const HeroSection = () => (
-    <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 hero-gradient overflow-hidden">
+const HeroSection = ({botpageclick}:{botpageclick:()=>void}) => {
+    async function sendPrompt(prompt:string) {
+        if (prompt.trim()) {
+            // Navigate to chat page with prompt as URL parameter
+            const encodedPrompt = encodeURIComponent(prompt.trim());
+            window.location.href = `/chat?prompt=${encodedPrompt}`;
+        } else {
+            botpageclick()
+        }
+    }
+    const [prompt,setPrompt] = useState("");
+    return (<section className="relative pt-32 pb-20 md:pt-48 md:pb-32 {hero-gradient} bg-transparent overflow-hidden">
         <div className="container mx-auto px-6 text-center">
             <MotionDiv className="max-w-4xl mx-auto">
-                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-slate-900 dark:text-white mb-6">
+                {/* <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter text-slate-900 dark:text-white mb-6">
                     Unlock India's Groundwater Data Instantly
-                </h1>
+                </h1> */}
+                <TextType
+                    text={["Unlock India's Groundwater Data Instantly"]}
+                    typingSpeed={75}
+                    pauseDuration={1500}
+                    showCursor={true}
+                    cursorCharacter="|"
+                    loop={true}
+                    deletingSpeed = {30}
+                    variableSpeed={0}
+                    textColors={["#fffff"]}
+                    onSentenceComplete={()=>{}}
+                    
+                    className='text-4xl md:text-6xl font-extrabold tracking-tighter text-slate-900 dark:text-white mb-6'
+                />
                 <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 font-secondry">
-                    Meet the INGRES AI ChatBOT: Your intelligent assistant for accessing India's dynamic groundwater resources. Ask in any language, get answers in seconds.
+                    Meet the JalMitra ChatBOT: Your intelligent assistant for accessing India's dynamic groundwater resources. Ask in any language, get answers in seconds.
                 </p>
                 <div className="flex justify-center items-center gap-4">
-                    <Button className="px-8 py-4 text-lg">Get Started</Button>
+                    <Button className="px-8 py-4 text-lg" onClick={()=>{botpageclick()}}>Get Started</Button>
                     <Button variant="outline" className="px-8 py-4 text-lg">Learn More</Button>
                 </div>
             </MotionDiv>
 
             <MotionDiv className="relative mt-16 md:mt-24 max-w-3xl mx-auto">
                  <div className="bg-white dark:bg-slate-800/50 rounded-xl p-4 space-y-4 border border-slate-200 dark:border-slate-700 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50">
-                    <div className="flex justify-end">
-                        <div className="bg-primary  text-white rounded-lg p-3 max-w-xs">
+                    <div className="flex justify-center">
+                        {/* <div className="bg-primary  text-white rounded-lg p-3 max-w-xs">
                             Show me the groundwater status for Jaipur district for 2023.
                         </div>
                     </div>
                     <div className="flex justify-start">
                         <div className="bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg p-3 max-w-md">
                             Certainly. The status for Jaipur District is 'Over-Exploited'. I am generating a chart with the historical trend...
-                        </div>
+                        </div> */}
+                        <h1 className='text-3xl dark:text-neutral-400
+                         my-2 font-bold text-neutral-500'>  Welcome back! What water data are you looking for today? 📊
+ </h1>
                     </div>
+                    <div className='flex gap-1'>
+                        <InputPromptArea value={prompt} onChange={(e)=>{setPrompt(e.target.value)}} sendPrompt={async ()=>{sendPrompt(prompt)}} disabled={false}></InputPromptArea>
+                    </div>
+
                 </div>
             </MotionDiv>
+            
         </div>
     </section>
-);
+)};
 
 const FeaturesSection = () => (
     <section id="features" className="py-20 md:py-28 bg-white dark:bg-slate-900">
@@ -167,7 +205,7 @@ const FeaturesSection = () => (
             <MotionDiv className="text-center max-w-3xl mx-auto mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">Powerful Features at Your Fingertips</h2>
                 <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">
-                    From complex queries to multilingual support, the INGRES AI is built to make groundwater data accessible to everyone.
+                    From complex queries to multilingual support, the JalMitra is built to make groundwater data accessible to everyone.
                 </p>
             </MotionDiv>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -204,7 +242,7 @@ const ImpactSection = () => (
                 <MotionDiv>
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">Empowering Informed Decisions for a Sustainable Future</h2>
                     <p className="mt-6 text-lg text-slate-600 dark:text-slate-400">
-                        By simplifying access to complex groundwater data, the INGRES AI ChatBOT bridges the gap between scientific information and actionable insights, fostering better water management for all.
+                        By simplifying access to complex groundwater data, the JalMitra ChatBOT bridges the gap between scientific information and actionable insights, fostering better water management for all.
                     </p>
                     <div className="mt-8 space-y-6">
                         {[
@@ -224,7 +262,7 @@ const ImpactSection = () => (
                 </MotionDiv>
                 <MotionDiv className="hidden lg:block">
                     <div className="p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
-                        <Image src="/mapvis.png" alt="Map visualization of groundwater data" className="rounded-xl w-full h-auto"/>
+                        <img  src="/mapvis.png" alt="Map visualization of groundwater data" className="rounded-xl w-full h-auto"/>
                     </div>
                 </MotionDiv>
             </div>
@@ -233,7 +271,12 @@ const ImpactSection = () => (
 );
 
 
-const AboutSection = () => (
+const AboutSection = () => {
+    const openNewTab = () => {
+        window.open("https://ingres.iith.ac.in/gecdataonline/gis/", "_blank", "noopener,noreferrer");
+      };
+    return (
+    
     <section id="about" className="py-20 md:py-28 bg-white dark:bg-slate-900">
         <div className="container mx-auto px-6 text-center max-w-4xl">
             <MotionDiv>
@@ -242,12 +285,12 @@ const AboutSection = () => (
                     The Assessment of Dynamic Ground Water Resources of India is an annual effort by the Central Ground Water Board (CGWB) and State/UT Ground Water Departments. The INGRES system, upon which this AI is built, is a product of collaboration between CGWB and IIT Hyderabad.
                 </p>
                 <div className="mt-8">
-                     <Button variant="outline" className="px-8 py-3">Visit INGRES Portal</Button>
+                         <Button variant="outline" className="px-8 py-3" onClick={openNewTab}>Visit INGRES Portal</Button>
                 </div>
             </MotionDiv>
         </div>
     </section>
-);
+)};
 
 const Footer = () => (
     <footer className="bg-slate-800 dark:bg-black text-slate-400">
@@ -261,35 +304,15 @@ const Footer = () => (
 
 // --- Main App Component ---
 export default function IngresAILandingPage() {
+    const router = useRouter();
 
     const thcntxt = useContext(ThemeContext)
     if(!thcntxt)
         throw new Error("Theme context does not exists")
     const {theme,setTheme} = thcntxt
     function botpageclick(){
-        redirect("/chat")
+        router.push("/chat")
     }
-
-    // useEffect(() => {
-    //     // On initial load, check for saved theme or system preference
-    //     const savedTheme = localStorage.getItem('theme');
-       
-    //     if (savedTheme) {
-    //         setTheme(savedTheme);
-    //     } else if (systemPrefersDark) {
-    //         setTheme('dark');
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     if (theme === 'dark') {
-    //         
-    //         localStorage.setItem('theme', 'dark');
-    //     } else {
-    //         document.documentElement.classList.remove('dark');
-    //         localStorage.setItem('theme', 'light');
-    //     }
-    // }, [theme]);
 
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
@@ -334,14 +357,21 @@ export default function IngresAILandingPage() {
 
     return (
         <>
+            <SmallChat></SmallChat>
             <Header theme={theme} toggleTheme={toggleTheme} botpageclick={botpageclick} />
             <main>
-                <HeroSection />
+                    { theme==="light" && <div className='fixed inset-0'>
+                        <Aurora
+                        // colorStops={["#fafdff","#fafdff","#fafdff"]}
+                        amplitude={0.7} speed={0.4}></Aurora> 
+                    </div>}
+                <HeroSection botpageclick={botpageclick}/>
                 <FeaturesSection />
                 <ImpactSection />
                 <AboutSection />
             </main>
             <Footer />
+            <GoogleTranslate></GoogleTranslate>
         </>
     );
 }
