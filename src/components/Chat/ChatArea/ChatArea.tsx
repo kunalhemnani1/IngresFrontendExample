@@ -11,7 +11,7 @@ import ThemeContext from "@/app/_Contxets/ThemeProvider";
 import { useSearchParams } from "next/navigation";
 import { Bot } from "lucide-react";
 
-const url = process.env.API_GATEWAY
+// const url = process.env.API_GATEWAY
 
 export type graphPoint = {
     x:any,  // x position
@@ -98,8 +98,8 @@ const initalmessage = [
 async function fetchData(prompt:string):Promise<responsetype>{
     
     try{
-
-        const resp = await fetch(url || "", {
+        // const newurl = url || ""
+        const resp = await fetch("http://13.201.46.102:8000/process-query", {
             method:"post",
             headers:{
                 "Content-Type":"application/json",
@@ -113,6 +113,7 @@ async function fetchData(prompt:string):Promise<responsetype>{
         
         return await resp.json();
     } catch(err){
+        console.log(err)
             return new Promise((resolve,reject)=>{
             setTimeout(()=>{
                 resolve(responseExample)
