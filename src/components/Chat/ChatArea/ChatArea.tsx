@@ -99,7 +99,7 @@ async function fetchData(prompt:string):Promise<responsetype>{
     
     try{
         // const newurl = url || ""
-        const resp = await fetch("http://13.201.46.102:8000/process-query", {
+        const resp = await fetch("https://13.201.46.102:8000/process-query", {
             method:"post",
             headers:{
                 "Content-Type":"application/json",
