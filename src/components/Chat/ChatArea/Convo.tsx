@@ -25,9 +25,9 @@ export default function Convo(
         <div className="flex flex-col px-2 h-full">
             <div className="flex-1 flex flex-col gap-6 overflow-y-auto max-h-[calc(100vh-200px)] scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
                 {
-                    messages.map((value,index)=>{
+                    messages.map((value:Message,index)=>{
                         const left = value.sender !== "user"
-                        return <MessageContainer left={left} key={index}> {value.text} </MessageContainer>
+                        return <MessageContainer left={left} key={index} graphArray={value.graphArray}> {value.text} </MessageContainer>
                     })
                 }
                 {

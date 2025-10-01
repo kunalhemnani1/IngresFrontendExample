@@ -1,12 +1,15 @@
-
 import { Bot, User } from "lucide-react";
+import { graphData } from "@/lib/types/User";
+import { ChartLineLinear } from "../GraphDisplay/graph";
 
 export default function MessageContainer({
     children,
     left,
+    graphArray,
 }:{
     children:React.ReactNode,
-    left:boolean
+    left:boolean,
+    graphArray?: graphData[]
 }){
     if(left)
         return (
@@ -14,12 +17,17 @@ export default function MessageContainer({
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
                     <Bot className="w-4 h-4 text-white" />
                 </div>
-                <div className="flex flex-col gap-1 max-w-[75%]">
+                <div className="flex flex-col gap-1 flex-1 items-start ">
                     <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm border border-slate-200/50 dark:border-slate-600/50">
                         <div className="text-slate-800 dark:text-slate-200 text-sm leading-relaxed">
                             {children}
                         </div>
                     </div>
+                    {
+                        graphArray && <div className="min-w-[100%]">
+                                <ChartLineLinear chartdata={graphArray}></ChartLineLinear>
+                        </div>
+                    }
                     <div className="text-xs text-slate-500 dark:text-slate-400 ml-1">
                         AI Assistant
                     </div>

@@ -4,33 +4,13 @@ import InputPromptArea from "../InputPrompt/InputTextArea";
 import { Button } from "@/components/ui/button";
 import Convo from "./Convo";
 import { Message } from "@/lib/types/User";
-import Suggestions from "@/components/Chat/Suggestions/suggestion"
-import { ChartLineLinear } from "../GraphDisplay/graph";
 import { useContext } from "react";
 import ThemeContext from "@/app/_Contxets/ThemeProvider";
 import { useSearchParams } from "next/navigation";
 import { Bot } from "lucide-react";
+import { graphPoint,graphData,responsetype } from "@/lib/types/User";
 
 // const url = process.env.API_GATEWAY
-
-export type graphPoint = {
-    x:any,  // x position
-    y1?:number // for multiple graphs on single plane
-    y2?:number // till yn 
-}
-
-export type graphData = {
-    graph_title?:string,
-    xlabel?:string,
-    ylabel?:string,
-    graph_type: "bar" | "line" | "natural" // we will add further more
-    graph_data : graphPoint[] // array of graphpoints
-}
-
-type responsetype = {
-    answer?:string,
-    graphs?:graphData[]
-}
 
 const graphEx:graphPoint[] = [
     {
@@ -86,20 +66,21 @@ const responseExample:responsetype = {
     graphs: graphsExample,
 } 
 
-const initalmessage = [
+const initalmessage:Message[] = [
     {
     id: "1",
     sender: "ai",
     text: "How can i assist you ? ",
-    timestamp: new Date("2025-09-12T10:00:00"),
+    timestamp:new Date("2025-09-12T10:00:00"),
   },
 ]
 
 async function fetchData(prompt:string):Promise<responsetype>{
     
     try{
+        throw new Error("dj")
         // const newurl = url || ""
-        const resp = await fetch("https://13.201.46.102:8000/process-query", {
+        const resp = await fetch("http://13.201.46.102:8000/process-query", {
             method:"post",
             headers:{
                 "Content-Type":"application/json",
@@ -135,27 +116,17 @@ export default function ChatArea({chatid,sm}:{chatid?:string,sm?:boolean}){
         return urlPrompt ? decodeURIComponent(urlPrompt) : "";
     })
     const [genrating,setGenrating] = useState<boolean>(false)
-    const [graphdata,setGraphdata] = useState<graphData[]>([])
     const [hasProcessedUrlPrompt, setHasProcessedUrlPrompt] = useState(false)
 
     async function genrateResult(currprompt:string) {
         const response:responsetype = await fetchData(currprompt);
-        const answer = {
+        const answer:Message = {
+            id : "1",
             sender: "ai",
-            text: response.answer || "Sorry, I couldn't process your request."
+            text: response.answer || "Sorry, I couldn't process your request.",
+            graphArray: response.graphs,
         }
-        const graph:graphData[] = response.graphs || []
-        // const answer:Message = {
-        //     sender:"ai",
-        //     text:"This is here ! "
-        // }
-        // await new Promise((resolve,reject)=>{
-        //     setTimeout(()=>{
-        //         resolve("hello")
-        //     },5000)
-        // })
         setGenrating(false)
-        setGraphdata(graph)
         setMessage((prev)=>[...prev,answer])
     }
 
@@ -243,15 +214,6 @@ export default function ChatArea({chatid,sm}:{chatid?:string,sm?:boolean}){
                     </div>
                 </div>
             </div>
-            {
-                graphdata.length>0 && (
-                <div className="flex-1 flex justify-center items-center border-l-1 px-2">
-                    <div className="flex-1">
-                        <ChartLineLinear chartdata={graphdata}></ChartLineLinear>
-                    </div>
-                </div>
-                )   
-            }
         </div>
     )
 }

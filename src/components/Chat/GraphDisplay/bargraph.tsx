@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { graphData, graphPoint } from "../ChatArea/ChatArea";
+import { graphData, graphPoint } from "@/lib/types/User";
 
 export default function BarGraph({val}:{
     val:graphData

@@ -17,7 +17,7 @@ import {
 //   ChartTooltip,
 //   ChartTooltipContent,
 // } from "@/components/ui/chart"
-import { graphData } from "../ChatArea/ChatArea"
+import { graphData } from "@/lib/types/User"
 import LineGraph from "./linegraph"
 import BarGraph from "./bargraph"
 
@@ -36,11 +36,11 @@ export function ChartLineLinear({chartdata}:{chartdata:graphData[]}) {
         <CardTitle> {val.graph_title || "Ground water data"} </CardTitle>
         <CardDescription> </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pl-1">
           
           {val.graph_type === "bar" ? <BarGraph val={val}></BarGraph>:<LineGraph val={val}></LineGraph>  }
           
-          </CardContent>
+      </CardContent>
           {/* <CardFooter className="flex-col items-start gap-2 text-sm">
             <div className="flex gap-2 leading-none font-medium">
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
@@ -50,6 +50,11 @@ export function ChartLineLinear({chartdata}:{chartdata:graphData[]}) {
             </div>
           </CardFooter> */}
         </Card>
+      // return(
+      //   <div className="dark:bg-neutral-900 rounded-lg py-4 box-border px-6">
+      //      {val.graph_type === "bar" ? <BarGraph val={val}></BarGraph>:<LineGraph val={val}></LineGraph>  }
+      //   </div>
+      // )
       })
     }
     
